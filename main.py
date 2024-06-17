@@ -1,16 +1,33 @@
-# This is a sample Python script.
+import openai
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+openai.api_key = "key"
 
 
-# Press the green button in the gutter to run the script.
+def bot(user_input, messages):
+    messages.append({"role": "user", "content": user_input})
+    response = openai.ChatCompletion.create(
+        model="gpt-4",
+        messages=messages
+    )
+    message = response.choices[0].message['content']
+    messages.append({"role": "assistant", "content": message})
+    return message, messages
+
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    messages = [
+        {"role": "system", "content": """
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+
+
+        """}
+    ]
+
+    while True:
+        user_input = input("You: ")
+        if user_input.lower() in ["quit", "exit"]:
+            print("Session ended.")
+            break
+
+        response, messages = bot(user_input, messages)
+        print("Assistant:", response)
