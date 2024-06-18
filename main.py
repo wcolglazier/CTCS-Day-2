@@ -1,7 +1,7 @@
 import openai
 
 openai.api_key = "sk-proj-3cYksoPkHvjzvGgH9XkhT3BlbkFJ9ZDSCpILOIkG6dU4lKBO"
-
+I7VZqjaKfJDwe3zHMbXGT3BlbkFJYKjZ5jlgs7EUtaPdfKqk
 
 def bot(user_input, messages):
     messages.append({"role": "user", "content": user_input})
