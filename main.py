@@ -1,6 +1,6 @@
 import openai
 
-openai.api_key = "key"
+openai.api_key = "sk-proj-3cYksoPkHvjzvGgH9XkhT3BlbkFJ9ZDSCpILOIkG6dU4lKBO"
 
 
 def bot(user_input, messages):
