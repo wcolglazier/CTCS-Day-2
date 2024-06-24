@@ -6,7 +6,7 @@ openai.api_key = "key"
 def bot(user_input, messages):
     messages.append({"role": "user", "content": user_input})
     response = openai.ChatCompletion.create(
-        model="gpt-4",
+        model="gpt-3.5",
         messages=messages
     )
     message = response.choices[0].message['content']
