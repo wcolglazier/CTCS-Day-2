@@ -1,0 +1,64 @@
+pip install SpeechRecognition gtts playsound pyaudio
+pip install openai==0.28
+import openai
+import speech_recognition as sr
+from gtts import gTTS
+import os
+from playsound import playsound
+
+openai.api_key = 'key'
+
+def bot(user_input):
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": """
+
+
+
+            """},
+
+            {"role": "user", "content": user_input},
+        ]
+    )
+
+    message = response.choices[0]['message']
+    bot_response = message['content']
+    text_to_speech(bot_response)
+
+    return bot_response
+
+def speech_to_text():
+    r = sr.Recognizer()
+
+    while True:
+        with sr.Microphone() as source:
+            print("Listening...")
+            r.adjust_for_ambient_noise(source)
+            audio = r.listen(source)
+
+        try:
+            text = r.recognize_google(audio)
+            print("You said:", text)
+
+            bot_response = bot(text)
+            print("Bot:", bot_response)
+
+            write_text_to_file(bot_response)
+
+        except sr.UnknownValueError:
+            print("Speech recognition could not understand audio.")
+        except sr.RequestError as e:
+            print("Could not request results from the speech recognition service:", str(e))
+
+def write_text_to_file(text, filename="orders.txt"):
+    with open(filename, 'w') as file:
+        file.write(text)
+
+def text_to_speech(text):
+    tts = gTTS(text)
+    tts.save('output.mp3')
+    playsound('output.mp3') 
+
+if __name__ == '__main__':
+    speech_to_text()
