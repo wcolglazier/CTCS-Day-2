@@ -1,9 +1,8 @@
 #pip install openai==0.28
 import openai
 
-openai.api_key = "sk-proj-"
+openai.api_key = "key"
 
-10LWdkuKhhK6aMQLVYu8T3BlbkFJM70wXwL5loadWMSAapgp
 
 def bot(user_input, messages):
     messages.append({"role": "user", "content": user_input})
