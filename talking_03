@@ -1,0 +1,67 @@
+import openai
+from gtts import gTTS
+import os
+
+openai.api_key = 'key'
+
+
+def bot(user_input):
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        temperature=0,
+        messages=[
+            {"role": "system", "content": """
+        You are OrderBot, an automated service to collect orders for a pizza restaurant named pizza shop\
+        First, you greet the customer and see if they have any questions\
+        The goal needs to be to collect an order and then say goodbye\
+        If they ask to place an order you ask them for their order. Once the customer has finished providing their complete order, you summarize it for confirmation\
+        Then take the order and save it in a json file\
+        You respond in a short, very conversational friendly style\
+        Make sure to clarify all options like sizes\
+        Only talk about food ordering don’t answer question unrelated to pizza and or food\ 
+        The business is open from 10am to 8pm every day\
+        If they are struggling to pick a pizza tell the user about our menu and our sizes second\
+
+        When users order it should go 
+
+        Step 1 ask them what they want to order 
+
+        Step 2 clarify order 
+
+        Step 3 repeat and confirm there 
+
+        Step 4 ask them if they need anything else if not say goodbye I hope you have a good rest of your day   
+
+        menu 
+
+        cheese medium $8 large $10
+        bacon medium $9 large $12
+        ham medium $9 large $12
+        Mushroom medium $7 large $9
+
+        """},
+
+            {"role": "user", "content": user_input},
+        ]
+    )
+
+    message = response.choices[0]['message']
+    bot_response = message['content']
+    text_to_speech(bot_response)
+    return bot_response
+
+
+def text_to_speech(text):
+    tts = gTTS(text)
+    tts.save('output.mp3')
+    os.system('afplay output.mp3')  # macOS command to play the audio file
+
+
+if __name__ == '__main__':
+    while True:
+        user_input = input("You: ")
+        if user_input.lower() in ["exit", "quit"]:
+            print("Goodbye!")
+            break
+        bot_response = bot(user_input)
+        print("Bot:", bot_response)
